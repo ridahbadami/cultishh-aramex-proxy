@@ -23,6 +23,15 @@ function checkSecret(req, res, next) {
 }
 
 app.get('/', (req, res) => res.json({ ok: true, service: 'cultishh-aramex-proxy' }));
+app.get('/myip', async (req, res) => {
+        try {
+                    const r = await fetch('https://api.ipify.org?format=json');
+                    const data = await r.json();
+                    res.json({ outbound_ip: data.ip });
+        } catch(e) {
+                    res.status(500).json({ error: e.message });
+        }
+});
 
 app.post('/aramex/ship', checkSecret, async (req, res) => {
     try {
